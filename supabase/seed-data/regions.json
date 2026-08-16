@@ -1,0 +1,9 @@
+[
+  { "code": "asia", "name_ja": "アジア", "name_en": "Asia" },
+  { "code": "middle_east", "name_ja": "中東", "name_en": "Middle East" },
+  { "code": "europe", "name_ja": "ヨーロッパ", "name_en": "Europe" },
+  { "code": "north_america", "name_ja": "北米", "name_en": "North America" },
+  { "code": "latin_america", "name_ja": "中南米", "name_en": "Latin America & Caribbean" },
+  { "code": "africa", "name_ja": "アフリカ", "name_en": "Africa" },
+  { "code": "oceania", "name_ja": "オセアニア", "name_en": "Oceania" }
+]
