@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/AuthContext';
 import { TravelDataProvider } from './lib/TravelDataContext';
 import { Layout } from './components/Layout';
@@ -38,11 +38,11 @@ function AuthGate() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <AuthGate />
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
