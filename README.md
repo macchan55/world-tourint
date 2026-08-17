@@ -48,25 +48,26 @@ node scripts/generate-seed-sql.mjs
 - `wishlist`: 行きたい国リスト
 - `goals`: 目標（訪問国数・地域制覇・特定国訪問）
 
-## デプロイ
-
-サーバーを持たずに公開する場合、`scripts/deploy.sh` でビルド成果物（JS/CSS/favicon）を
-Supabaseの公開Storageバケット（`site`）にアップロードし、起動用の `data:` URL を発行できます。
+## デプロイ（GitHub Pages）
 
 ```bash
-export SUPABASE_PROJECT_REF=xxxxxxxx
-export SUPABASE_ANON_KEY=sb_publishable_xxxxxxxx
-./scripts/deploy.sh
+./scripts/deploy.sh   # npm run build して docs/ に出力
+git add docs vite.config.ts
+git commit -m "Deploy to GitHub Pages"
+git push
 ```
 
-`*.supabase.co` はHTML判定したオブジェクトに `Content-Type: text/plain` と
-`Content-Security-Policy: default-src 'none'; sandbox` を強制する（フィッシング対策と
-思われる）ため、Storage / Edge Functions のどちらからも実行可能な `index.html` を直接配信できない。
-そのためJS/CSS/faviconのみStorageから配信し、`index.html` 自体は自己完結の `data:` URLとして配布する。
-事前に `vite.config.ts` の `base` をSupabaseプロジェクトの完全修飾URLに設定しておくこと
-（`data:` URLには基点オリジンがなく、相対/絶対パス参照が解決できないため）。
+その後リポジトリの Settings > Pages で「Deploy from a branch」→ このブランチ →
+`/docs` を選択すると `https://<owner>.github.io/world-tourint/` で公開されます。
 
-独自ドメインやVercel/Netlify等の通常のホスティングに載せる場合は、`vite.config.ts` の
-`base` を `/` に戻し、`src/App.tsx` の `HashRouter` を `BrowserRouter` に戻せばよい
-（`HashRouter` は静的ホスティングでサーバー側のSPAフォールバック設定が不要な代わりに
-URLに `#` が入る）。
+サインアップ時のメール確認リンクを機能させるには、Supabaseダッシュボードの
+Authentication > URL Configuration で Site URL / Redirect URLs に上記のPages URLを
+登録してください（未登録のURLへのリダイレクトはSupabase側で拒否されます）。
+
+Supabase Storage / Edge Functionsは `*.supabase.co` 上でHTMLと判定したオブジェクトに
+`Content-Type: text/plain` と `Content-Security-Policy: default-src 'none'; sandbox` を
+強制する（フィッシング対策と思われる）ため、実行可能な `index.html` をそこから直接配信する
+ことはできません。そのため通常の静的ホスティング（GitHub Pages）を使っています。
+`src/App.tsx` で `HashRouter` を使っているのは、GitHub PagesにSPAのサーバー側フォールバック
+設定がなく、`BrowserRouter` だと `/dashboard`等への直接アクセスや再読み込みで404になるためです
+（URLに `#` が入る代わりに、リライト設定なしでどのパスでも動作します）。
